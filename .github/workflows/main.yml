@@ -1,0 +1,28 @@
+name: Docker Build and Push
+
+on:
+  push:
+    branches: [ "main" ] # Se activa cuando subes algo a la rama main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4 # Punto 1: Checkout
+
+      - name: Docker set up buildx
+        uses: docker/setup-buildx-action@v3 # Punto 2: Buildx
+
+      - name: Docker login
+        uses: docker/login-action@v3 # Punto 3: Login con Secretos
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Docker Build and push
+        uses: docker/build-push-action@v5 # Punto 4: Build and push
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/docker-test:latest
