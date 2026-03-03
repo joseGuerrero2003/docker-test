@@ -96,7 +96,15 @@ push to `main` (and on pull requests) it will:
 
 1. **checkout** the repository
 2. set up `buildx` for cross-platform builds
-3. log in to a Docker registry using secrets `DOCKER_USERNAME`/`DOCKER_PASSWORD`
+3. log in to a Docker registry.  By default the workflow uses GitHub's own token
+   to authenticate to GHCR:
+   ```yaml
+   username: ${{ github.actor }}
+   password: ${{ secrets.GITHUB_TOKEN }}
+   ```
+   (no manual secret required).  If you instead push to Docker Hub or another
+   registry, replace this step and provide your own credentials via the
+   `DOCKER_USERNAME`/`DOCKER_PASSWORD` secrets.
 4. build the image and push it to `ghcr.io/${{ github.repository }}` with both `latest` and
    SHA tags
 
