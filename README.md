@@ -69,3 +69,36 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+---
+
+## Docker support
+
+A `Dockerfile` is provided at the project root that builds the React app using a multi-stage
+build and serves the output with `nginx`.
+
+You can build the image locally with:
+
+```sh
+docker build -t my-app:local .
+```
+
+and run it using:
+
+```sh
+docker run --rm -p 8080:80 my-app:local
+```
+
+### CI/CD
+
+A GitHub Actions workflow (`.github/workflows/docker-image.yml`) is also included.  On every
+push to `main` (and on pull requests) it will:
+
+1. **checkout** the repository
+2. set up `buildx` for cross-platform builds
+3. log in to a Docker registry using secrets `DOCKER_USERNAME`/`DOCKER_PASSWORD`
+4. build the image and push it to `ghcr.io/${{ github.repository }}` with both `latest` and
+   SHA tags
+
+Make sure you add the appropriate secrets to your fork before the first run.  You can
+change the registry/credentials or tags to suit your needs.
