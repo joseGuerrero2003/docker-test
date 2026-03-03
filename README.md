@@ -98,6 +98,10 @@ push to `main` (and on pull requests) it will:
 2. set up `buildx` for cross-platform builds
 3. log in to a Docker registry.  By default the workflow uses GitHub's own token
    to authenticate to GHCR:
+
+> **Note:** GitHub Container Registry requires all repository names in image tags
+> to be lowercase.  The workflow lowercases `${{ github.repository }}` using
+> `toLower(...)` to avoid errors when your user or repo contain uppercase letters.
    ```yaml
    username: ${{ github.actor }}
    password: ${{ secrets.GITHUB_TOKEN }}
